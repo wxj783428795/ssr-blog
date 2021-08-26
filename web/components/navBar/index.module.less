@@ -1,0 +1,48 @@
+.nav-bar {
+    height: 56px;
+    padding: 0 36px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(107, 114, 128);
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.blog-title {
+    font-weight: 700;
+    font-size: 18px /* 18px */;
+    line-height: 18px /* 28px */;
+    color: white;
+}
+.nav-items {
+    display: flex;
+    a {
+        margin-right: 20px;
+        li {
+            color: white;
+            transition-property: background-color, border-color, color, fill, stroke;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 500ms;
+            &:hover {
+                color: rgba(96, 165, 250);
+            }
+        }
+    }
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    > div {
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+    }
+    > span {
+        font-size: 14px;
+        line-height: 20px;
+    }
+}

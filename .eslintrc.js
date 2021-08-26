@@ -6,4 +6,8 @@ module.exports = {
     // parserOptions: {
     //   project: './tsconfig.lint.json'
     // }
+    parserOptions: {
+        ecmaVersion: 6,
+        sourceType: "module",
+    },
 };

@@ -17,6 +17,7 @@ const Layout = (props: LayoutProps) => {
                 />
                 <meta name="theme-color" content="#000000" />
                 <title>Serverless Side Render</title>
+                <link rel="stylesheet" href="/static/css/tailwind.min.css"></link>
                 {/* <script dangerouslySetInnerHTML={{ __html: "var w = document.documentElement.clientWidth / 3.75;document.getElementsByTagName('html')[0].style['font-size'] = w + 'px'" }} /> */}
                 {injectCss}
             </head>

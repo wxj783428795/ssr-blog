@@ -15,7 +15,10 @@ run/
 .nodejs-cache
 AUTHORS
 .serverless
-build
+build/server
+build/client
+build/*.js
+build/*.json
 .faas_debug_tmp
 code.zip
 .env_temp
