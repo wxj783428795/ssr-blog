@@ -11,6 +11,7 @@
     "autoprefixer": "^10.3.2",
     "egg": "^2.0.0",
     "egg-scripts": "^2.10.0",
+    "gray-matter": "^4.0.3",
     "postcss": "^8.3.6",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
