@@ -1,7 +1,7 @@
 import DefaultLayout from "@/components/defaultLayout";
 import React, { useEffect } from "react";
 import { SProps } from "ssr-types-react";
-import styles from "./render.less";
+import styles from "./index.module.less";
 import Typed from "typed.js";
 
 export default function Index(props: SProps) {
