@@ -3,10 +3,15 @@ module.exports = {
     purge: ["./web/**/*.{vue,js,ts,jsx,tsx}"],
     darkMode: false, // or 'media' or 'class'
     theme: {
-        extend: {},
+        extend: {
+            transitionProperty: {
+                display:'display'
+             },
+        },
     },
     variants: {
         extend: {
+          
         },
     },
     plugins: [],
