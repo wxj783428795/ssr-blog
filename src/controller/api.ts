@@ -1,6 +1,6 @@
-import { Inject, Controller, Provide, Get } from '@midwayjs/decorator'
+import { Inject, Controller, Provide, Get, Post } from '@midwayjs/decorator'
 import { Context } from 'egg'
-import { IApiService, IApiDetailService } from '../interface'
+import { IApiService, IApiDetailService, ITagsService } from '../interface'
 
 @Provide()
 @Controller('/api')
@@ -14,14 +14,28 @@ export class Api {
   @Inject('ApiDetailService')
   detailService: IApiDetailService
 
+  @Inject('TagsService')
+  tagsService: ITagsService
+
   @Get('/index')
-  async getIndexData () {
+  async getIndexData() {
     const data = await this.service.index()
     return data
   }
+  @Get('/tags')
+  async getTagsData() {
+    const data = await this.tagsService.index()
+    return data
+  }
+  @Post('/postImage')
+  async postImage() {
+    return {
+      "status": "done",
+    }
+  }
 
   @Get('/detail/:id')
-  async getDetailData () {
+  async getDetailData() {
     const { ctx, detailService } = this
     const id = ctx.params.id
     const data = await detailService.index(id)

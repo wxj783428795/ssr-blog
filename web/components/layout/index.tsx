@@ -19,6 +19,8 @@ const Layout = (props: LayoutProps) => {
                 <title>Serverless Side Render</title>
                 <link rel="stylesheet" href="/static/css/tailwind.min.css"></link>
                 <link rel="stylesheet" href="/static/css/toastui-editor.css"></link>
+                <link rel="stylesheet" href="/static/css/antd.css"></link>
+                <link rel="stylesheet" href="/static/css/custom.css"></link>
                 {/* <script dangerouslySetInnerHTML={{ __html: "var w = document.documentElement.clientWidth / 3.75;document.getElementsByTagName('html')[0].style['font-size'] = w + 'px'" }} /> */}
                 {injectCss}
             </head>

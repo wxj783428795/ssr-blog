@@ -1,106 +1,128 @@
 /*
  * @Author: wxj
- * @Date: 2021-08-28 00:58:32
- * @LastEditTime: 2021-08-29 01:39:49
+ * @Date: 2021-08-31 10:39:34
+ * @LastEditTime: 2021-09-01 15:26:08
  * @LastEditors: wxj
  * @Description:
  * @FilePath: \ssr-blog\web\components\articleForm\index.tsx
  */
-import React, { useRef } from "react";
+import { TagsData } from "@/interface/tags-index";
+import { Input, Form, Button, Upload, message, Modal, Tag } from "antd";
+import React, { FC } from "react";
 import { useState } from "react";
-
-const Index = () => {
-    const imageInputRef = useRef<HTMLInputElement>(null);
-    const imgRef = useRef<HTMLImageElement>(null);
-    const [imageUploaded, setimageUploaded] = useState(false);
-    const [showDeleteImage, setshowDeleteImage] = useState(false);
-    const [showTagsModal, setshowTagsModal] = useState(false);
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = e.target.files;
-        let url;
-        if (files) {
-            url = window.webkitURL.createObjectURL(files[0]);
-            if (imgRef.current && imageInputRef.current) {
-                imageInputRef.current.value = "";
-                imgRef.current.src = url;
-                setimageUploaded(true);
-            }
-        } else {
-            url = "";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { RcFile, UploadChangeParam } from "antd/lib/upload";
+import { UploadFile } from "antd/lib/upload/interface";
+import { getCookie } from "@/utils/utils";
+import Item from "antd/lib/list/Item";
+const { CheckableTag } = Tag;
+const Index: FC<{ tags: TagsData | undefined }> = (props) => {
+    const { tags } = { ...props };
+    const [imageUrl, setimageUrl] = useState("");
+    const [loading, setloading] = useState(false);
+    const [previewVisible, setpreviewVisible] = useState(false);
+    const [selectedTags, setselectedTags] = useState<string[]>([]);
+    const beforeUpload = (file: RcFile, FileList: RcFile[]) => {
+        const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+        if (!isJpgOrPng) {
+            message.error("只能上传JPG或PNG文件!");
+        }
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+            message.error("图片不能超过2MB!");
+        }
+        return isJpgOrPng && isLt2M;
+    };
+    const handleChange = (info: UploadChangeParam<UploadFile<any>>) => {
+        if (info.file.status === "uploading") {
+            setloading(true);
+            return;
+        }
+        if (info.file.status === "done") {
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
+                setloading(false);
+                setimageUrl(reader.result as string);
+            });
+            reader.readAsDataURL(info.file.originFileObj as RcFile);
         }
     };
-
-    console.log(`showDeleteImage`, showDeleteImage);
-
+    console.log(`selectedTags`, selectedTags);
     return (
-        <form>
-            <div className="mb-6">
-                <label className=" text-base font-bold">标题：</label>
-                <input name="title" className="outline-none border w-8/12 h-8 pl-4 text-sm"></input>
-            </div>
-            <div className="mb-6 items-center flex">
-                <div className="text-base font-bold">封面：</div>
-                <div
-                    onClick={(e) => imageInputRef.current?.click()}
-                    className="relative bg-cover text-gray-400 font-bold text-3xl  w-40 h-24 border border-dashed border-gray-300 hover:bg-gray-100 rounded-lg flex justify-center items-center cursor-pointer"
-                >
-                    <img
-                        onMouseOver={(e) => setshowDeleteImage(true)}
-                        onMouseOut={(e) => setshowDeleteImage(false)}
-                        className="h-full w-full"
-                        style={{ display: imageUploaded ? "unset" : "none" }}
-                        ref={imgRef}
-                    ></img>
-                    <span style={{ display: !imageUploaded ? "unset" : "none" }}>+</span>
-                    <span
-                        onMouseOver={(e) => setshowDeleteImage(true)}
-                        className="absolute -top-2.5 -right-2.5 w-5 h-5 text-sm text-center rounded-full bg-gray-400 text-white cursor-pointer"
-                        style={{ display: imageUploaded && showDeleteImage ? "unset" : "none" }}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            if (imgRef.current) {
-                                imgRef.current.src = "";
-                            }
-                            setimageUploaded(false);
-                        }}
+        <div>
+            <Form
+                name="basic"
+                labelCol={{ span: 2 }}
+                wrapperCol={{ span: 22 }}
+                initialValues={{ remember: true }}
+            >
+                <Form.Item label="标题" name="title">
+                    <Input placeholder="请输入标题" />
+                </Form.Item>
+                <Form.Item label="封面" name="cover">
+                    <Upload
+                        action={`/api/postimage?_csrf=${getCookie("csrfToken")}`}
+                        method="post"
+                        name="avatar"
+                        listType="picture-card"
+                        className="avatar-uploader"
+                        fileList={
+                            imageUrl
+                                ? [
+                                      {
+                                          uid: "-1",
+                                          name: "image.png",
+                                          status: "done",
+                                          url: imageUrl,
+                                      },
+                                  ]
+                                : undefined
+                        }
+                        beforeUpload={beforeUpload}
+                        onChange={handleChange}
+                        onPreview={(e) => setpreviewVisible(true)}
+                        onRemove={(e) => setimageUrl("")}
                     >
-                        X
-                    </span>
-                </div>
-                <input
-                    ref={imageInputRef}
-                    type="file"
-                    id="imageInput"
-                    name="imageInput"
-                    className=" opacity-0"
-                    onChange={(e) => handleImageChange(e)}
-                ></input>
-            </div>
-            <div className="mb-6 flex items-center relative">
-                <label className=" text-base font-bold">标签：</label>
-                <div
-                    className="outline-none border w-max h-8 px-4 text-sm flex items-center hover:bg-blue-100 hover:text-blue-500 cursor-pointer"
-                    onClick={(e) => setshowTagsModal(true)}
-                >
-                    + 添加文章标签
-                </div>
-                <div
-                    className="absolute w-full h-80 border shadow -bottom-80"
-                    style={{ display: showTagsModal ? "block" : "none" }}
-                >
-                    <div className="h-8 w-full border-b flex justify-center items-center relative ">
-                        <span>标签</span>
-                        <span
-                            className="absolute right-2 cursor-pointer"
-                            onClick={(e) => setshowTagsModal(false)}
+                        {imageUrl ? null : (
+                            <div>
+                                {loading ? <LoadingOutlined /> : <PlusOutlined />}
+                                <div style={{ marginTop: 8 }}>点击上传</div>
+                            </div>
+                        )}
+                    </Upload>
+                </Form.Item>
+
+                <Form.Item label="标签" name="tags">
+                    {tags?.tagsData?.data.map((item) => (
+                        <CheckableTag
+                            checked={selectedTags.includes(item.id)}
+                            key={item.id}
+                            onChange={(checked) => {
+                                const nextSelectedTags = !checked
+                                    ? [...selectedTags.filter((t) => t !== item.id)]
+                                    : [...selectedTags, item.id];
+                                setselectedTags(nextSelectedTags);
+                            }}
                         >
-                            X
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </form>
+                            {item.name}
+                        </CheckableTag>
+                    ))}
+                </Form.Item>
+
+                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                    <Button type="primary" htmlType="submit">
+                        发布博客
+                    </Button>
+                </Form.Item>
+            </Form>
+            <Modal
+                visible={previewVisible}
+                footer={null}
+                onCancel={(e) => setpreviewVisible(false)}
+            >
+                <img alt="img" style={{ width: "100%" }} src={imageUrl} />
+            </Modal>
+        </div>
     );
 };
 
