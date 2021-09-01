@@ -16,7 +16,7 @@ const Layout = (props: LayoutProps) => {
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                 />
                 <meta name="theme-color" content="#000000" />
-                <title>Serverless Side Render</title>
+                <title>Josh's Blog</title>
                 <link rel="stylesheet" href="/static/css/tailwind.min.css"></link>
                 <link rel="stylesheet" href="/static/css/toastui-editor.css"></link>
                 <link rel="stylesheet" href="/static/css/antd.css"></link>

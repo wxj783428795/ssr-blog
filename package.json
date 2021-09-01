@@ -5,6 +5,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.6.4",
     "@midwayjs/decorator": "^2.3.0",
+    "@midwayjs/orm": "^2.12.7",
     "@midwayjs/web": "^2.3.0",
     "@toast-ui/react-editor": "^3.0.3",
     "@types/typed.js": "^2.0.9",
@@ -14,6 +15,7 @@
     "egg": "^2.0.0",
     "egg-scripts": "^2.10.0",
     "gray-matter": "^4.0.3",
+    "pg": "^8.7.1",
     "postcss": "^8.3.6",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
@@ -24,6 +26,7 @@
     "swiper": "6.7.5",
     "tailwindcss": "^2.2.7",
     "typed.js": "^2.0.12",
+    "typeorm": "^0.2.37",
     "vite": "^2.5.0"
   },
   "devDependencies": {
@@ -40,6 +43,7 @@
   },
   "scripts": {
     "prod": "ssr build && egg-scripts start --daemon --port=4000 --title=midway-server-my_midway_project --framework=@midwayjs/web",
+    "prod:nobuild": "egg-scripts start --daemon --port=4000 --title=midway-server-my_midway_project --framework=@midwayjs/web",
     "stop": "egg-scripts stop --title=midway-server-my_midway_project",
     "start": "ssr start",
     "start:vite": "ssr start --vite",

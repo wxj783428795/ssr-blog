@@ -1,27 +1,37 @@
 /*
  * @Author: wxj
  * @Date: 2021-08-31 10:39:34
- * @LastEditTime: 2021-09-01 15:26:08
+ * @LastEditTime: 2021-09-01 17:01:41
  * @LastEditors: wxj
  * @Description:
  * @FilePath: \ssr-blog\web\components\articleForm\index.tsx
  */
 import { TagsData } from "@/interface/tags-index";
-import { Input, Form, Button, Upload, message, Modal, Tag } from "antd";
+import { Input, Form, Button, Upload, message, Modal, Tag, Space } from "antd";
 import React, { FC } from "react";
 import { useState } from "react";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { CloseOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { RcFile, UploadChangeParam } from "antd/lib/upload";
 import { UploadFile } from "antd/lib/upload/interface";
 import { getCookie } from "@/utils/utils";
-import Item from "antd/lib/list/Item";
+import { useRef } from "react";
+import { useEffect } from "react";
 const { CheckableTag } = Tag;
+
+type FormValues = {
+    title: string;
+};
+
 const Index: FC<{ tags: TagsData | undefined }> = (props) => {
     const { tags } = { ...props };
     const [imageUrl, setimageUrl] = useState("");
     const [loading, setloading] = useState(false);
     const [previewVisible, setpreviewVisible] = useState(false);
-    const [selectedTags, setselectedTags] = useState<string[]>([]);
+    const [selectedTags, setselectedTags] = useState<{ id: string; name: string }[]>([]);
+    const [inputVisible, setinputVisible] = useState(false);
+    const saveInputRef = useRef<Input>(null);
+    const [inputValue, setinputValue] = useState("");
+    const [newTags, setnewTags] = useState<{ id: string; name: string }[]>([]);
     const beforeUpload = (file: RcFile, FileList: RcFile[]) => {
         const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
         if (!isJpgOrPng) {
@@ -47,14 +57,40 @@ const Index: FC<{ tags: TagsData | undefined }> = (props) => {
             reader.readAsDataURL(info.file.originFileObj as RcFile);
         }
     };
-    console.log(`selectedTags`, selectedTags);
+
+    const handleInputConfirm: React.FocusEventHandler<HTMLInputElement> = (e) => {
+        if (inputValue) {
+            if (
+                tags?.tagsData?.data.some((item) => item.name === inputValue) ||
+                newTags.some((item) => item.name === inputValue)
+            ) {
+                message.warn(`新标签名 ${inputValue} 与已有标签名重复`);
+            } else {
+                setnewTags([...newTags, { id: new Date().valueOf().toString(), name: inputValue }]);
+            }
+        }
+        setinputVisible(false);
+    };
+
+    //input显示后，自动聚焦
+    useEffect(() => {
+        if (inputVisible) {
+            saveInputRef.current?.focus();
+        }
+    }, [inputVisible]);
+
+    const handleFinish = (values: FormValues) => {
+        console.log(`values`, values);
+    };
+
     return (
         <div>
-            <Form
+            <Form<FormValues>
                 name="basic"
                 labelCol={{ span: 2 }}
                 wrapperCol={{ span: 22 }}
                 initialValues={{ remember: true }}
+                onFinish={handleFinish}
             >
                 <Form.Item label="标题" name="title">
                     <Input placeholder="请输入标题" />
@@ -92,21 +128,73 @@ const Index: FC<{ tags: TagsData | undefined }> = (props) => {
                     </Upload>
                 </Form.Item>
 
-                <Form.Item label="标签" name="tags">
+                <Form.Item label="标签">
                     {tags?.tagsData?.data.map((item) => (
                         <CheckableTag
-                            checked={selectedTags.includes(item.id)}
+                            style={{ border: "1px solid #eeeeee" }}
+                            checked={selectedTags.map((item) => item.id).includes(item.id)}
                             key={item.id}
                             onChange={(checked) => {
                                 const nextSelectedTags = !checked
-                                    ? [...selectedTags.filter((t) => t !== item.id)]
-                                    : [...selectedTags, item.id];
+                                    ? [...selectedTags.filter((t) => t.id !== item.id)]
+                                    : [...selectedTags, { id: item.id, name: item.name }];
                                 setselectedTags(nextSelectedTags);
                             }}
                         >
                             {item.name}
                         </CheckableTag>
                     ))}
+                    {newTags.map((item) => (
+                        <CheckableTag
+                            style={{ border: "1px solid #eeeeee" }}
+                            checked={selectedTags.map((tag) => tag.id).includes(item.id)}
+                            key={item.id}
+                            onChange={(checked) => {
+                                const nextSelectedTags = !checked
+                                    ? [...selectedTags.filter((t) => t.id !== item.id)]
+                                    : [...selectedTags, { id: item.id, name: item.name }];
+                                setselectedTags(nextSelectedTags);
+                            }}
+                        >
+                            <div className="flex justify-center items-center">
+                                {item.name}{" "}
+                                <CloseOutlined
+                                    className=" ml-2"
+                                    onClick={(e) => {
+                                        setnewTags([
+                                            ...newTags.filter((tag) => tag.id !== item.id),
+                                        ]);
+                                        setselectedTags([
+                                            ...selectedTags.filter((tag) => tag.id !== item.id),
+                                        ]);
+                                    }}
+                                />
+                            </div>
+                        </CheckableTag>
+                    ))}
+                    {inputVisible && (
+                        <Input
+                            ref={saveInputRef}
+                            type="text"
+                            size="small"
+                            style={{ width: "64px" }}
+                            value={inputValue}
+                            onChange={(e) => setinputValue(e.target.value)}
+                            onBlur={handleInputConfirm}
+                            // onPressEnter={this.handleInputConfirm}
+                        />
+                    )}
+                    {!inputVisible && (
+                        <Tag
+                            onClick={(e) => {
+                                setinputVisible(true);
+                            }}
+                        >
+                            <div className="flex justify-center items-center">
+                                <PlusOutlined /> 新增标签
+                            </div>
+                        </Tag>
+                    )}
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
