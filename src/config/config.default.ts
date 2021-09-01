@@ -21,7 +21,7 @@ export const orm = {
   type: 'postgres',
   host: 'localhost',
   port: '5433',
-  username: 'postgres',
-  password: 'postgres',
+  username: 'blog',
+  password: 'blog',
   database: 'blog',
 }
