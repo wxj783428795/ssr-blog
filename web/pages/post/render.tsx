@@ -35,17 +35,17 @@ const Post = (props: SProps) => {
         }
     }, [editorReady]);
 
-    const handleClick = () => {
-        const md_html = editorIns.getHTML();
-        console.log(`md_html`, md_html);
-        // const data = matter(md_html);
-        // console.log(`data`, data)
-    };
-    console.log(`state`, state);
+    // const handleClick = () => {
+    //     const md_html = editorIns.getHTML();
+    //     const md = editorIns.getMarkdown();
+    //     console.log(`md_html`, md_html);
+    //     // const data = matter(md_html);
+    //     // console.log(`data`, data)
+    // };
     return (
         <div className="flex p-8 h-screen bg-gray-100">
             <div className="w-2/6 h-full bg-white mr-8 border rounded p-8">
-                <ArticleForm tags={state} />
+                <ArticleForm tags={state} editorIns={editorIns} />
             </div>
             <div id="editor" className="w-4/6 h-full bg-white"></div>
         </div>

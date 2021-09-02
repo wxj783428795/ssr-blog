@@ -1,15 +1,16 @@
 /*
  * @Author: wxj
  * @Date: 2021-09-01 17:31:12
- * @LastEditTime: 2021-09-02 00:14:59
+ * @LastEditTime: 2021-09-02 16:40:32
  * @LastEditors: wxj
  * @Description: 
  * @FilePath: \ssr-blog\src\entity\t_articles.ts
  */
 import { EntityModel } from '@midwayjs/orm';
-import { Column, PrimaryColumn  } from 'typeorm';
+import { Column, PrimaryColumn, OneToMany } from 'typeorm';
+import { ArticleTags } from './t_article_tags'
 
-@EntityModel('articles')
+@EntityModel('t_articles')
 export class Articles {
     @PrimaryColumn()
     id: string;
@@ -20,7 +21,13 @@ export class Articles {
     @Column()
     updatetime: string;
     @Column()
-    content: string;
+    html: string;
+    @Column()
+    markdown: string;
     @Column()
     cover: string;
+    @OneToMany(type => ArticleTags, articleTags => articleTags.article, {
+        cascade: true
+    })
+    tagids: ArticleTags[]
 }

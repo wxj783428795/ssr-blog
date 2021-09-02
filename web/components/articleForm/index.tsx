@@ -1,7 +1,7 @@
 /*
  * @Author: wxj
  * @Date: 2021-08-31 10:39:34
- * @LastEditTime: 2021-09-01 17:01:41
+ * @LastEditTime: 2021-09-02 14:48:24
  * @LastEditors: wxj
  * @Description:
  * @FilePath: \ssr-blog\web\components\articleForm\index.tsx
@@ -16,14 +16,17 @@ import { UploadFile } from "antd/lib/upload/interface";
 import { getCookie } from "@/utils/utils";
 import { useRef } from "react";
 import { useEffect } from "react";
+import { PostBlogData } from "../../../typings/api";
+import { createTags, postBlog } from "@/request/request";
+
 const { CheckableTag } = Tag;
 
 type FormValues = {
     title: string;
 };
 
-const Index: FC<{ tags: TagsData | undefined }> = (props) => {
-    const { tags } = { ...props };
+const Index: FC<{ tags: TagsData | undefined; editorIns: any }> = (props) => {
+    const { tags, editorIns } = { ...props };
     const [imageUrl, setimageUrl] = useState("");
     const [loading, setloading] = useState(false);
     const [previewVisible, setpreviewVisible] = useState(false);
@@ -80,7 +83,27 @@ const Index: FC<{ tags: TagsData | undefined }> = (props) => {
     }, [inputVisible]);
 
     const handleFinish = (values: FormValues) => {
-        console.log(`values`, values);
+        const md_html = editorIns.getHTML();
+        const md = editorIns.getMarkdown();
+        const params: PostBlogData = {
+            md: md,
+            html: md_html,
+            title: values.title,
+            cover: imageUrl,
+            tags: selectedTags.filter((selectedTag) =>
+                newTags.every((newTag) => selectedTag.id !== newTag.id)
+            ),
+            newTags: newTags.filter((newTag) =>
+                selectedTags.some((selectedTag) => selectedTag.id === newTag.id)
+            ),
+        };
+        // postBlog(params).then((data) => {
+        //     console.log(`data`, data);
+        // });
+        createTags(params.newTags).then((tagData) => {
+            postBlog(params).then((blogData) => {});
+        });
+        console.log(`params`, params);
     };
 
     return (
@@ -92,7 +115,11 @@ const Index: FC<{ tags: TagsData | undefined }> = (props) => {
                 initialValues={{ remember: true }}
                 onFinish={handleFinish}
             >
-                <Form.Item label="标题" name="title">
+                <Form.Item
+                    label="标题"
+                    name="title"
+                    rules={[{ required: true, message: "标题是必填项" }]}
+                >
                     <Input placeholder="请输入标题" />
                 </Form.Item>
                 <Form.Item label="封面" name="cover">
