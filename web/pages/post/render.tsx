@@ -3,6 +3,7 @@ import { EditorOptions } from "@toast-ui/editor";
 import React, { useContext, useEffect, useState } from "react";
 import { IContext, SProps } from "ssr-types-react";
 import ArticleForm from "../../components/articleForm";
+import 'antd/dist/antd.css';
 let Editor = {
     Editor: class Editor {
         constructor(option: EditorOptions) {}

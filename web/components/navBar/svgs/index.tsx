@@ -1,7 +1,7 @@
 /*
  * @Author: wxj
  * @Date: 2021-08-26 13:57:27
- * @LastEditTime: 2021-08-26 14:29:53
+ * @LastEditTime: 2021-09-02 22:20:56
  * @LastEditors: wxj
  * @Description:
  * @FilePath: \ssr-blog\web\components\navBar\svgs\index.tsx
@@ -10,11 +10,16 @@ import React from "react";
 
 const HomeSvg = () => {
     return (
-        <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="18901">
+        <svg
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="4473"
+            fill="currentColor"
+        >
             <path
                 d="M944.25 422.24l-390-342.83a64 64 0 0 0-84.5 0l-390 342.83c-22.17 19.47-8.38 56 21.13 56H160V832a64 64 0 0 0 64 64h576a64 64 0 0 0 64-64V478.27h59.12c29.51 0 43.29-36.56 21.13-56.03z m-244.69 202C658.3 694.21 587.72 736 510.8 736c-74.86 0-144.39-40.06-186-107.15a32 32 0 1 1 54.4-33.72c29.85 48.12 79 76.87 131.6 76.87 54 0 104-30 133.64-80.25a32 32 0 1 1 55.12 32.5z"
-                p-id="18902"
-                fill="currentColor"
+                p-id="4474"
             ></path>
         </svg>
     );
@@ -43,5 +48,22 @@ const FileSvg = () => {
         </svg>
     );
 };
+const MenuSvg = () => {
+    return (
+        <svg
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="6056"
+            fill="currentColor"
+        >
+            <path
+                d="M128 298.666667h768a42.666667 42.666667 0 0 0 0-85.333334H128a42.666667 42.666667 0 0 0 0 85.333334z m768 170.666666H128a42.666667 42.666667 0 0 0 0 85.333334h768a42.666667 42.666667 0 0 0 0-85.333334z m0 256H128a42.666667 42.666667 0 0 0 0 85.333334h768a42.666667 42.666667 0 0 0 0-85.333334z"
+                p-id="6057"
+                fill="#ffffff"
+            ></path>
+        </svg>
+    );
+};
 
-export { HomeSvg, TagSvg,FileSvg };
+export { HomeSvg, TagSvg, FileSvg ,MenuSvg};

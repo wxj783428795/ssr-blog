@@ -8,7 +8,7 @@ const Layout = (props: LayoutProps) => {
     const { injectCss, injectScript } = props.staticList!;
 
     return (
-        <html lang="en">
+        <html lang="en" style={{ overflowX: "hidden" }}>
             <head>
                 <meta charSet="utf-8" />
                 <meta
@@ -19,7 +19,7 @@ const Layout = (props: LayoutProps) => {
                 <title>Josh's Blog</title>
                 <link rel="stylesheet" href="/static/css/tailwind.min.css"></link>
                 <link rel="stylesheet" href="/static/css/toastui-editor.css"></link>
-                <link rel="stylesheet" href="/static/css/antd.css"></link>
+                {/* <link rel="stylesheet" href="/static/css/antd.css"></link> */}
                 <link rel="stylesheet" href="/static/css/custom.css"></link>
                 {/* <script dangerouslySetInnerHTML={{ __html: "var w = document.documentElement.clientWidth / 3.75;document.getElementsByTagName('html')[0].style['font-size'] = w + 'px'" }} /> */}
                 {injectCss}

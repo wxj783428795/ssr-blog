@@ -6,14 +6,15 @@ module.exports = {
     theme: {
         extend: {
             transitionProperty: {
-                display:'display'
-             },
+                display: "display",
+            },
+            width: {
+                "4xl": "56rem",
+            },
         },
     },
     variants: {
-        extend: {
-          
-        },
+        extend: {},
     },
     plugins: [],
 };

@@ -1,13 +1,13 @@
 /*
  * @Author: wxj
  * @Date: 2021-08-25 00:01:22
- * @LastEditTime: 2021-08-27 01:09:25
+ * @LastEditTime: 2021-09-02 22:24:57
  * @LastEditors: wxj
  * @Description: 顶部导航
  * @FilePath: \ssr-blog\web\components\navBar\index.tsx
  */
 import React from "react";
-import { HomeSvg, TagSvg, FileSvg } from "./svgs";
+import { HomeSvg, TagSvg, FileSvg, MenuSvg } from "./svgs";
 import styles from "./index.module.less";
 const navItems: NavItem[] = [
     {
@@ -29,11 +29,11 @@ const navItems: NavItem[] = [
 
 const NavBar = () => {
     return (
-        <div className="nav-bar h-14 px-9 w-full flex justify-between items-center bg-gray-500 fixed top-0 left-0 z-10">
+        <div className="nav-bar h-14 px-6 md:px-9 w-full flex justify-between items-center bg-gray-500 fixed top-0 left-0 z-10">
             {/* <div className={styles["nav-bar"]}> */}
             <div className="blog-title font-bold text-lg text-white"> Josh's blog</div>
             {/* <div className={styles["blog-title"]}> Josh's blog</div> */}
-            <ul className="nav-items flex">
+            <ul className="nav-items hidden mb-0 md:flex">
                 {/* <ul className={styles["nav-items"]}> */}
                 {navItems.map((item, index) => (
                     <a className="mr-5" key={item.link} href={item.link}>
@@ -48,6 +48,9 @@ const NavBar = () => {
                     </a>
                 ))}
             </ul>
+            <div className='md:hidden w-5 h-5 cursor-pointer'>
+                <MenuSvg />
+            </div>
         </div>
     );
 };
