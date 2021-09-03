@@ -1,7 +1,7 @@
 /*
  * @Author: wxj
  * @Date: 2021-08-31 10:39:34
- * @LastEditTime: 2021-09-02 14:48:24
+ * @LastEditTime: 2021-09-03 13:07:23
  * @LastEditors: wxj
  * @Description:
  * @FilePath: \ssr-blog\web\components\articleForm\index.tsx
@@ -17,7 +17,7 @@ import { getCookie } from "@/utils/utils";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { PostBlogData } from "../../../typings/api";
-import { createTags, postBlog } from "@/request/request";
+import { createTags, postBlog, postImage } from "@/request/request";
 
 const { CheckableTag } = Tag;
 
@@ -52,12 +52,16 @@ const Index: FC<{ tags: TagsData | undefined; editorIns: any }> = (props) => {
             return;
         }
         if (info.file.status === "done") {
-            const reader = new FileReader();
-            reader.addEventListener("load", () => {
-                setloading(false);
-                setimageUrl(reader.result as string);
-            });
-            reader.readAsDataURL(info.file.originFileObj as RcFile);
+            // const url = window.webkitURL.createObjectURL(info.file.originFileObj);
+            const url = info.file.response.data;
+            setloading(false);
+            setimageUrl(url);
+            // const reader = new FileReader();
+            // reader.addEventListener("load", () => {
+            //     setloading(false);
+            //     setimageUrl(reader.result as string);
+            // });
+            // reader.readAsDataURL(info.file.originFileObj as RcFile);
         }
     };
 
@@ -124,7 +128,12 @@ const Index: FC<{ tags: TagsData | undefined; editorIns: any }> = (props) => {
                 </Form.Item>
                 <Form.Item label="封面" name="cover">
                     <Upload
-                        action={`/api/postimage?_csrf=${getCookie("csrfToken")}`}
+                        action={`/api/postImage?_csrf=${getCookie("csrfToken")}`}
+                        // customRequest={(option) => {
+                        //     // postImage(option.file).then(data=>{
+                        //     //     console.log(`data`, data)
+                        //     // });
+                        // }}
                         method="post"
                         name="avatar"
                         listType="picture-card"

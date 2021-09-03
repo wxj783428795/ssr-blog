@@ -1,7 +1,7 @@
 /*
  * @Author: wxj
  * @Date: 2021-09-02 09:11:03
- * @LastEditTime: 2021-09-02 13:21:51
+ * @LastEditTime: 2021-09-03 11:29:21
  * @LastEditors: wxj
  * @Description: 
  * @FilePath: \ssr-blog\web\request\request.ts
@@ -15,6 +15,10 @@ const instance = axios.create({
     headers: {
         'x-csrf-token': getCookie('csrfToken')
     }
+})
+
+export const postImage = (data: ArrayBuffer) => instance.post<ArrayBuffer>('/postImage', {
+    data: data
 })
 
 export const postBlog = (data: PostBlogData) => instance.post<PostBlogData>('/postblog', {

@@ -25,3 +25,7 @@ export const orm = {
   password: 'blog',
   database: 'blog',
 }
+
+export const upload = {
+  mod: 'file',
+}

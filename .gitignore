@@ -17,6 +17,7 @@ AUTHORS
 .serverless
 build/server
 build/client
+build/upload
 build/*.js
 build/*.json
 .faas_debug_tmp
