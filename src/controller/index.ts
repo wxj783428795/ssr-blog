@@ -1,7 +1,7 @@
 import { Readable } from 'stream'
 import { Controller, Get, Provide, Inject } from '@midwayjs/decorator'
 import { render } from 'ssr-core-react'
-import { IApiService, IApiDetailService, ITagsService } from '../interface'
+import { IApiService, IApiDetailService, ITagsService, IArticlesService } from '../interface'
 import { IEggContext } from 'typings/ctx'
 
 
@@ -21,12 +21,16 @@ export class Index {
   @Inject('TagsService')
   tagsService: ITagsService
 
+  @Inject('ArticlesService')
+  articlesService: IArticlesService
+
   @Get('/')
   @Get('/detail/:id')
   async handler(): Promise<void> {
     try {
       this.ctx.apiService = this.apiService
       this.ctx.apiDeatilservice = this.apiDeatilservice
+      this.ctx.apiArticlesService = this.articlesService
       const stream = await render<Readable>(this.ctx, {
         stream: true
       })

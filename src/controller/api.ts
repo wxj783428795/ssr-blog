@@ -7,6 +7,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as awaitStream from 'await-stream-ready';
 import * as sendToWormHole from 'stream-wormhole';
+import { v4 as uuidv4 } from 'uuid';
+
 @Provide()
 @Controller('/api')
 export class Api {
@@ -42,21 +44,22 @@ export class Api {
   }
   @Post('/postImage')
   async postImage() {
+    //定义文件上传根路径
     const uploadPath = process.cwd() + '/build/upload'
-    const parts = this.ctx.multipart();
+    const parts = this.ctx.multipart();//从formData中获取数据
     let part = null;
     while ((part = await parts()) != null) {
-      console.log(`part`, part)
-      const fileName = new Date().valueOf() + part.filename;
-      const dirname = `${new Date().getFullYear()}${new Date().getMonth() + 1}${new Date().getDate()}`;
+      // const fileName = `${uuidv4()} ${part.filename}`;
+      const fileName = part.filename.split('.').join(` ${uuidv4()}.`);
+      const dirname = new Date().toLocaleDateString().split('/').join('');
       const mkdirResult = this.mkdirSync(path.join(uploadPath, dirname));
       if (!mkdirResult) {
         return { state: false, message: '创建文件夹错误', data: '' };
       }
       const target = path.join(uploadPath, dirname, fileName);
-      const writeStream = fs.createWriteStream(target);
+      const writeStream = fs.createWriteStream(target);//创建可写流
       try {
-        await awaitStream.write(part.pipe(writeStream));
+        await awaitStream.write(part.pipe(writeStream));//将图片写入可写流
         const p = uploadPath.split('/').reverse()[0];
         return { state: true, data: `/${p}/` + dirname + '/' + fileName, message: '上传成功' };
       } catch (err) {
@@ -64,9 +67,6 @@ export class Api {
         await sendToWormHole(part);
         return { state: false, message: '文件错误' };
       }
-    }
-    return {
-      "status": "done",
     }
   }
 

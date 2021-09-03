@@ -1,7 +1,7 @@
 /*
  * @Author: wxj
  * @Date: 2021-08-31 10:39:34
- * @LastEditTime: 2021-09-03 13:07:23
+ * @LastEditTime: 2021-09-03 16:46:02
  * @LastEditors: wxj
  * @Description:
  * @FilePath: \ssr-blog\web\components\articleForm\index.tsx
@@ -52,16 +52,9 @@ const Index: FC<{ tags: TagsData | undefined; editorIns: any }> = (props) => {
             return;
         }
         if (info.file.status === "done") {
-            // const url = window.webkitURL.createObjectURL(info.file.originFileObj);
             const url = info.file.response.data;
             setloading(false);
             setimageUrl(url);
-            // const reader = new FileReader();
-            // reader.addEventListener("load", () => {
-            //     setloading(false);
-            //     setimageUrl(reader.result as string);
-            // });
-            // reader.readAsDataURL(info.file.originFileObj as RcFile);
         }
     };
 
@@ -129,11 +122,6 @@ const Index: FC<{ tags: TagsData | undefined; editorIns: any }> = (props) => {
                 <Form.Item label="封面" name="cover">
                     <Upload
                         action={`/api/postImage?_csrf=${getCookie("csrfToken")}`}
-                        // customRequest={(option) => {
-                        //     // postImage(option.file).then(data=>{
-                        //     //     console.log(`data`, data)
-                        //     // });
-                        // }}
                         method="post"
                         name="avatar"
                         listType="picture-card"
