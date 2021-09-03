@@ -11,9 +11,20 @@ export class ApiArticlesService {
   @InjectEntityModel(Articles)
   articleModel: Repository<Articles>
 
+  @InjectEntityModel(ArticleTags)
+  articleTagsModel: Repository<ArticleTags>
+
+
   async index(): Promise<any> {
-    const articles = await this.articleModel.find()
-    return { data: articles }
+    try {
+      const articles = await this.articleModel.createQueryBuilder('a')
+        .leftJoinAndSelect('a.tags', 'at')
+         .select(['a.id', 'a.title', 'a.cover', 'a.html', 'a.createtime', 'a.updatetime', 'at.tagid', 'at.name'])
+        .getMany();
+      return { data: articles }
+    } catch (error) {
+      return { data: error }
+    }
   }
 
   async create(data: PostBlogData): Promise<any> {

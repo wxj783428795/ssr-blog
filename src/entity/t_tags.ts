@@ -1,13 +1,14 @@
 /*
  * @Author: wxj
  * @Date: 2021-09-02 00:20:12
- * @LastEditTime: 2021-09-02 00:37:26
+ * @LastEditTime: 2021-09-04 00:30:15
  * @LastEditors: wxj
  * @Description: 
  * @FilePath: \ssr-blog\src\entity\t_tags.ts
  */
 import { EntityModel } from '@midwayjs/orm';
-import { Column, PrimaryColumn  } from 'typeorm';
+import { Column, OneToOne, PrimaryColumn } from 'typeorm';
+import { ArticleTags } from './t_article_tags';
 
 @EntityModel('t_tags')
 export class Tags {
@@ -19,4 +20,6 @@ export class Tags {
     createtime: string;
     @Column()
     updatetime: string;
+    @OneToOne(type => ArticleTags, a => a.tag)
+    articleTag: ArticleTags
 }
