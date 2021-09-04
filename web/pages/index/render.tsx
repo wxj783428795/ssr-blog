@@ -72,22 +72,22 @@ const ArticleCard: FC<{ item: ArticleData; index: number }> = (props) => {
     return (
         <div
             key={item.id}
-            className={`border rounded-lg shadow-lg lg:w-8/12 h-72 w-full hover:shadow-xl transition-all duration-500 flex items-center
-${index & 1 ? "flex-row-reverse" : ""} ${index ? `mt-5` : ""}`}
+            className={`border rounded-lg shadow-lg lg:w-8/12 md:h-72 w-full hover:shadow-xl transition-all duration-500 flex items-center flex-col
+${index & 1 ? "md:flex-row-reverse" : "md:flex-row"} ${index ? `mt-5` : ""}`}
         >
             <div
-                className={`h-full w-5/12 overflow-hidden ${
-                    index & 1 ? "rounded-r-lg" : "rounded-l-lg"
+                className={`h-full w-full md:w-5/12 overflow-hidden ${
+                    index & 1 ? " rounded-lg md:rounded-r-lg" : "rounded-lg md:rounded-l-lg"
                 }`}
             >
                 <a href={`/article/${item.id}`}>
                     <img
-                        className="transform hover:scale-110 w-full h-full object-cover transition-all duration-500"
+                        className="transform hover:scale-110 w-full h-60 md:h-full object-cover transition-all duration-500"
                         src={item.cover}
                     />
                 </a>
             </div>
-            <div className=" w-7/12 px-8 py-4 overflow-hidden justify-center">
+            <div className="w-full md:w-7/12 px-8 py-4 overflow-hidden justify-center">
                 <a className="text-black text-2xl" href={`/article/${item.id}`}>
                     {item.title}
                 </a>
