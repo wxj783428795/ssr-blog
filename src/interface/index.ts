@@ -9,7 +9,7 @@ export interface ITagsService {
   create: (tagNames: TagData[]) => Promise<any>
 }
 export interface IArticlesService {
-  index: () => Promise<any>
+  index: (pageSize: number, pageIndex: number) => Promise<any>
   create: (articleData: PostBlogData) => Promise<any>
 }
 

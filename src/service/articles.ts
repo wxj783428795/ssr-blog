@@ -15,11 +15,13 @@ export class ApiArticlesService {
   articleTagsModel: Repository<ArticleTags>
 
 
-  async index(): Promise<any> {
+  async index(pageSize: number = 10, pageIndex: number = 1): Promise<any> {
     try {
       const articles = await this.articleModel.createQueryBuilder('a')
         .leftJoinAndSelect('a.tags', 'at')
-         .select(['a.id', 'a.title', 'a.cover', 'a.html', 'a.createtime', 'a.updatetime', 'at.tagid', 'at.name'])
+        .select(['a.id', 'a.title', 'a.cover', 'a.html', 'a.createtime', 'a.updatetime', 'at.tagid', 'at.name'])
+        .skip(pageSize * (pageIndex - 1))
+        .take(pageSize)
         .getMany();
       return { data: articles }
     } catch (error) {

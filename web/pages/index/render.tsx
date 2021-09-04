@@ -1,12 +1,28 @@
 import DefaultLayout from "@/components/defaultLayout";
-import React, { useContext, useEffect } from "react";
+import React, { FC, useContext, useEffect, useRef, useState } from "react";
 import { IContext, SProps } from "ssr-types-react";
 import styles from "./index.module.less";
 import Typed from "typed.js";
-import { ArticlesData } from "@/interface";
+import { ArticleData, ArticlesData, PaginationState } from "@/interface";
+import { TagSvg, TimeSvg } from "@/components/svgs";
 
 export default function Index(props: SProps) {
-    const { state, dispatch } = useContext<IContext<ArticlesData>>(window.STORE_CONTEXT);
+    const { state, dispatch } = useContext<IContext<ArticlesData & PaginationState>>(
+        window.STORE_CONTEXT
+    );
+
+    // useEffect(() => {
+    //     if (state?.paginationState) {
+    //         dispatch?({
+    //             type: "updateContext",
+    //             payload: {
+    //                 search: {
+    //                     text: e.target.value,
+    //                 },
+    //             },
+    //         });
+    //     }
+    // }, [state?.paginationState.pageIndex, state?.paginationState.pageSize]);
     console.log(`state`, state);
     useEffect(() => {
         var typed = new Typed("#typed", {
@@ -35,22 +51,7 @@ export default function Index(props: SProps) {
             <div className="h-screen w-full flex justify-center py-5 md:py-10">
                 <div className="content-left max-w-7xl w-full px-5">
                     {state?.articlesData?.data.map((item, index) => (
-                        <div
-                            key={item.id}
-                            className={`rounded-lg shadow-lg lg:w-8/12 h-72 w-full hover:shadow-xl transition-all duration-500 flex 
-                            ${index & 1 ? "flex-row-reverse" : ""} ${index ? `mt-5` : ""}`}
-                        >
-                            <div
-                                className={`h-full w-5/12 overflow-hidden 
-                                ${index & 1 ? "rounded-r-lg" : "rounded-l-lg"}`}
-                            >
-                                <img
-                                    className=" transform hover:scale-110 w-full h-full object-cover transition-all duration-500"
-                                    src={item.cover}
-                                />
-                            </div>
-                            <div className="h-full w-7/12"></div>
-                        </div>
+                        <ArticleCard key={item.id} index={index} item={item} />
                     ))}
                 </div>
                 <div className="content-right"></div>
@@ -58,3 +59,70 @@ export default function Index(props: SProps) {
         </DefaultLayout>
     );
 }
+
+const ArticleCard: FC<{ item: ArticleData; index: number }> = (props) => {
+    const { item, index } = { ...props };
+    const ref = useRef<HTMLDivElement>(null);
+    const [brief, setbrief] = useState("");
+    useEffect(() => {
+        if (ref.current) {
+            setbrief(`${ref.current.innerText.substr(0, 300)}...`);
+        }
+    }, []);
+    return (
+        <div
+            key={item.id}
+            className={`border rounded-lg shadow-lg lg:w-8/12 h-72 w-full hover:shadow-xl transition-all duration-500 flex items-center
+${index & 1 ? "flex-row-reverse" : ""} ${index ? `mt-5` : ""}`}
+        >
+            <div
+                className={`h-full w-5/12 overflow-hidden ${
+                    index & 1 ? "rounded-r-lg" : "rounded-l-lg"
+                }`}
+            >
+                <a href={`/article/${item.id}`}>
+                    <img
+                        className="transform hover:scale-110 w-full h-full object-cover transition-all duration-500"
+                        src={item.cover}
+                    />
+                </a>
+            </div>
+            <div className=" w-7/12 px-8 py-4 overflow-hidden justify-center">
+                <a className="text-black text-2xl" href={`/article/${item.id}`}>
+                    {item.title}
+                </a>
+                <div className=" text-gray-500 flex items-center mt-2">
+                    <div className="h-4 w-4 mr-1">
+                        <TimeSvg />
+                    </div>
+                    {`发布于：${item.createtime.split(" ")[0]}`}
+                    <span className="ml-3">|</span>
+                    <div className="h-4 w-4 mr-1 ml-3">
+                        <TagSvg />
+                    </div>
+                    {item.tags.map((tag, index) => (
+                        <>
+                            {index ? <span className="mx-1">·</span> : null}
+                            <a
+                                className=" text-gray-500"
+                                href={`/tags/${tag.tagid}`}
+                                key={tag.tagid}
+                            >
+                                {tag.name}
+                            </a>
+                        </>
+                    ))}
+                </div>
+                <div
+                    className="overflow-hidden mt-3"
+                    dangerouslySetInnerHTML={{ __html: brief }}
+                ></div>
+                <div
+                    ref={ref}
+                    className="hidden"
+                    dangerouslySetInnerHTML={{ __html: item.html }}
+                ></div>
+            </div>
+        </div>
+    );
+};

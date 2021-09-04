@@ -1,4 +1,4 @@
-import { Inject, Controller, Provide, Get, Post, Body, ALL } from '@midwayjs/decorator'
+import { Inject, Controller, Provide, Get, Post, Body, ALL, Query } from '@midwayjs/decorator'
 import { Context } from 'egg'
 import { PostBlogData, TagData } from 'typings/api'
 import { IBody } from 'typings/ctx'
@@ -38,8 +38,9 @@ export class Api {
     return data
   }
   @Get('/articles')
-  async getArticles() {
-    const data = await this.articlesService.index()
+  async getArticles(@Query(ALL) query: { pageSize: number, pageIndex: number }) {
+    const { pageSize = 10, pageIndex = 1 } = { ...query }
+    const data = await this.articlesService.index(pageSize, pageIndex)
     return data
   }
   @Post('/postImage')

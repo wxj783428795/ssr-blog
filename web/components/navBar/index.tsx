@@ -1,13 +1,13 @@
 /*
  * @Author: wxj
  * @Date: 2021-08-25 00:01:22
- * @LastEditTime: 2021-09-02 22:24:57
+ * @LastEditTime: 2021-09-04 09:29:13
  * @LastEditors: wxj
  * @Description: 顶部导航
  * @FilePath: \ssr-blog\web\components\navBar\index.tsx
  */
 import React from "react";
-import { HomeSvg, TagSvg, FileSvg, MenuSvg } from "./svgs";
+import { HomeSvg, TagSvg, FileSvg, MenuSvg } from "../svgs";
 import styles from "./index.module.less";
 const navItems: NavItem[] = [
     {
