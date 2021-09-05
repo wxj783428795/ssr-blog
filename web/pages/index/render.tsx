@@ -5,6 +5,7 @@ import styles from "./index.module.less";
 import Typed from "typed.js";
 import { ArticleData, ArticlesData, PaginationState } from "@/interface";
 import { TagSvg, TimeSvg } from "@/components/svgs";
+import Avatar from '@/components/avatar'
 
 export default function Index(props: SProps) {
     const { state, dispatch } = useContext<IContext<ArticlesData & PaginationState>>(
@@ -49,12 +50,16 @@ export default function Index(props: SProps) {
                 </div>
             </div>
             <div className="h-screen w-full flex justify-center py-5 md:py-10">
-                <div className="content-left max-w-7xl w-full px-5">
-                    {state?.articlesData?.data.map((item, index) => (
-                        <ArticleCard key={item.id} index={index} item={item} />
-                    ))}
+                <div className="content max-w-6xl w-full px-5 flex">
+                    <div className="content-left lg:w-9/12 w-full">
+                        {state?.articlesData?.data.map((item, index) => (
+                            <ArticleCard key={item.id} index={index} item={item} />
+                        ))}
+                    </div>
+                    <div className="content-right lg:w-3/12 hidden lg:block pl-5">
+                        <Avatar />
+                    </div>
                 </div>
-                <div className="content-right"></div>
             </div>
         </DefaultLayout>
     );
@@ -66,13 +71,13 @@ const ArticleCard: FC<{ item: ArticleData; index: number }> = (props) => {
     const [brief, setbrief] = useState("");
     useEffect(() => {
         if (ref.current) {
-            setbrief(`${ref.current.innerText.substr(0, 300)}...`);
+            setbrief(`${ref.current.innerText.substr(0, 250)}...`);
         }
     }, []);
     return (
         <div
-            key={item.id}
-            className={`border rounded-lg shadow-lg lg:w-8/12 md:h-72 w-full hover:shadow-xl transition-all duration-500 flex items-center flex-col
+            // key={item.id}
+            className={`border rounded-lg shadow-lg md:h-72  hover:shadow-xl transition-all duration-500 flex items-center flex-col
 ${index & 1 ? "md:flex-row-reverse" : "md:flex-row"} ${index ? `mt-5` : ""}`}
         >
             <div

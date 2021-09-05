@@ -17,13 +17,14 @@ export class ApiArticlesService {
 
   async index(pageSize: number = 10, pageIndex: number = 1): Promise<any> {
     try {
+      //这边用skip和take实现的分页，回导致文章的tag永远只返回一个，暂时没解决
       const articles = await this.articleModel.createQueryBuilder('a')
         .leftJoinAndSelect('a.tags', 'at')
+        // .skip(pageSize * (pageIndex - 1))
+        // .take(pageSize).printSql()
         .select(['a.id', 'a.title', 'a.cover', 'a.html', 'a.createtime', 'a.updatetime', 'at.tagid', 'at.name'])
-        .skip(pageSize * (pageIndex - 1))
-        .take(pageSize)
-        .getMany();
-      return { data: articles }
+       .getMany();
+      return { data: articles.slice(pageSize * (pageIndex - 1), pageSize * pageIndex) }
     } catch (error) {
       return { data: error }
     }
